@@ -10,7 +10,7 @@ public class ServicioRestaurante extends Servicio {
     public ServicioRestaurante(int codigo, String comida) {
         super(codigo, "Restaurante - " + comida, 0, TipoServicio.RESTAURANTE);
         this.comida = comida;
-        // El precio base se establece en 0 y se calculará en calcularPrecio()
+        //el precio base se establece en 0 y se calculara en calcularPrecio()
     }
 
     public String getComida() {
@@ -27,7 +27,7 @@ public class ServicioRestaurante extends Servicio {
             case "cena":
                 return PRECIO_CENA;
             default:
-                return 0; // O lanzar una excepción si la comida no es válida
+                return 0; //no valida
         }
     }
 

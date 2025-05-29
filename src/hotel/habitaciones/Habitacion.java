@@ -8,7 +8,7 @@ public class Habitacion {
     public Habitacion(int numero, TipoHabitacion tipo) {
         this.numero = numero;
         this.tipo = tipo;
-        this.estado = EstadoHabitacion.DISPONIBLE; // Inicialmente, todas las habitaciones están disponibles
+        this.estado = EstadoHabitacion.DISPONIBLE; // default = disponible
     }
 
     // Métodos getter para todos los atributos

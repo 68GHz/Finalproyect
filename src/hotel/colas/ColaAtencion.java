@@ -3,10 +3,10 @@ package hotel.colas;
 import hotel.util.ListaEnlazada;
 
 public class ColaAtencion<T> {
-    private ListaEnlazada<T> cola; // Especificamos el tipo genérico <T>
+    private ListaEnlazada<T> cola; //tipo generico <T>
 
     public ColaAtencion() {
-        this.cola = new ListaEnlazada<>(); // El constructor de ListaEnlazada también es genérico
+        this.cola = new ListaEnlazada<>(); //el constructor de ListaEnlazada también es generico
     }
 
     public boolean estaVacia() {

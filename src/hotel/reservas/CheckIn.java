@@ -8,7 +8,6 @@ public class CheckIn {
     private Huesped huesped;
     private Habitacion habitacion;
     private ListaEnlazada<RegistroServicio> serviciosAdquiridos;
-    // Podríamos añadir información como la fecha de check-in, número de noches, etc.
 
     public CheckIn(Huesped huesped, Habitacion habitacion) {
         this.huesped = huesped;

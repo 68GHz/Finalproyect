@@ -13,7 +13,7 @@ public abstract class Servicio {
         this.tipo = tipo;
     }
 
-    // Métodos getter
+    //getter
     public int getCodigo() {
         return codigo;
     }
@@ -30,7 +30,7 @@ public abstract class Servicio {
         return tipo;
     }
 
-    // Método abstracto que las clases concretas implementarán para calcular el precio final (si es necesario)
+    // metodo abstracto que las clases concretas implementarán para calcular el precio final
     public abstract double calcularPrecio();
 
     @Override

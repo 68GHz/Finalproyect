@@ -1,6 +1,6 @@
-package hotel.util; // Una única declaración del paquete
+package hotel.util;
 
-public class ListaEnlazada<T> { // Ahora la clase es directamente genérica
+public class ListaEnlazada<T> { //generica
     private Nodo<T> cabeza;
 
     public ListaEnlazada() {
@@ -64,10 +64,10 @@ public class ListaEnlazada<T> { // Ahora la clase es directamente genérica
         return contador;
     }
 
-    // Nuevo método para eliminar al inicio
+    //eliminar al inicio
     public T eliminarAlInicio() {
         if (estaVacia()) {
-            return null; // O podrías lanzar una excepción
+            return null;
         }
         T datoEliminado = cabeza.dato;
         cabeza = cabeza.siguiente;
@@ -76,7 +76,7 @@ public class ListaEnlazada<T> { // Ahora la clase es directamente genérica
 
     public T eliminarUltimo() {
         if (estaVacia()) {
-            return null; // O podrías lanzar una excepción
+            return null;
         }
         if (cabeza.siguiente == null) {
             T datoEliminado = cabeza.dato;

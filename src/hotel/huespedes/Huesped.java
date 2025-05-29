@@ -30,7 +30,7 @@ public class Huesped {
         return genero;
     }
 
-    // Métodos setter (opcional, dependiendo de si quieres permitir modificar la información del huésped)
+    //setter
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }

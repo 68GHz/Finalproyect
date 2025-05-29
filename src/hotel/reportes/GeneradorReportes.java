@@ -112,7 +112,7 @@ public class GeneradorReportes {
         }
     }
 
-    // Clase interna para ayudar con el conteo por género
+    //clase interna para ayudar con el conteo por genero
     private static class ConteoGenero {
         Genero genero;
         int cantidad;
@@ -122,10 +122,6 @@ public class GeneradorReportes {
             this.cantidad = cantidad;
         }
     }
-
-    // Puedes ir implementando los otros reportes de manera similar, usando ListaEnlazada
-    // para agrupar y contar la información.
-    // Por ahora, dejaremos los otros métodos sin implementar para simplificar.
 
     public void mostrarValorTotalRecaudadoPorGenero() {
         ListaEnlazada<ConteoMontoGenero> montosPorGenero = new ListaEnlazada<>();
@@ -156,7 +152,7 @@ public class GeneradorReportes {
         }
     }
 
-    // Clase interna para ayudar con el conteo y monto por género
+    //clase interna para ayudar con el conteo y monto por genero
     private static class ConteoMontoGenero {
         Genero genero;
         double monto;
@@ -221,7 +217,7 @@ public class GeneradorReportes {
         }
     }
 
-    // Clase interna para ayudar con el conteo de servicios
+    //clase interna para ayudar con el conteo de servicios
     private static class ConteoServicio {
         TipoServicio tipoServicio;
         double monto;
@@ -235,7 +231,6 @@ public class GeneradorReportes {
     public void mostrarMontoTotalDescuentosHechos() {
         double totalDescuentos = 0;
         for (int i = 0; i < registrosPago.obtenerTamano(); i++) {
-            // Asumiendo que la clase RegistroPago tiene un método para obtener el descuento aplicado
             totalDescuentos += registrosPago.obtener(i).getDescuentoAplicado();
         }
         System.out.println("Monto total de descuentos hechos: $" + String.format("%.2f", totalDescuentos));
@@ -243,7 +238,7 @@ public class GeneradorReportes {
 
     public void mostrarMontoTotalPorRangoEdad() {
         double[] montosPorRango = new double[4]; // Ejemplo de 4 rangos de edad
-        // Rangos de edad: 0-12 (Niños), 13-25 (Jóvenes), 26-60 (Adultos), >60 (Adultos Mayores)
+        // Rangos de edad: 0-12 (Niños), 13-25 (Jovenes), 26-60 (Adultos), >60 (Adultos Mayores)
 
         for (int i = 0; i < registrosPago.obtenerTamano(); i++) {
             RegistroPago registro = registrosPago.obtener(i);
@@ -293,7 +288,7 @@ public class GeneradorReportes {
     }
 
     public void mostrarPorcentajeHuespedesPorRangoEdad() {
-        int[] conteoPorRango = new int[4]; // Ejemplo de 4 rangos de edad
+        int[] conteoPorRango = new int[4]; // ejm
         int totalHuespedes = registrosCheckIn.obtenerTamano();
 
         if (totalHuespedes == 0) {
@@ -301,7 +296,6 @@ public class GeneradorReportes {
             return;
         }
 
-        // Rangos de edad: 0-12 (Niños), 13-25 (Jóvenes), 26-60 (Adultos), >60 (Adultos Mayores)
         for (int i = 0; i < registrosCheckIn.obtenerTamano(); i++) {
             int edadHuesped = registrosCheckIn.obtener(i).getHuesped().getEdad();
             if (edadHuesped <= 12) {
@@ -326,7 +320,7 @@ public class GeneradorReportes {
         ListaEnlazada<ConteoServicio> montosPorServicio = new ListaEnlazada<>();
         double montoTotalHotel = 0;
 
-        // Calcular el monto total recaudado por cada servicio
+        //calcular el monto total recaudado por cada servicio
         for (int i = 0; i < registrosCheckIn.obtenerTamano(); i++) {
             CheckIn checkIn = registrosCheckIn.obtener(i);
             for (int j = 0; j < checkIn.getServiciosAdquiridos().obtenerTamano(); j++) {
@@ -349,7 +343,7 @@ public class GeneradorReportes {
             }
         }
 
-        // Calcular el monto total recaudado en el hotel
+        //calcular el monto total recaudado en el hotel
         for (int i = 0; i < registrosPago.obtenerTamano(); i++) {
             montoTotalHotel += registrosPago.obtener(i).getMonto();
         }
@@ -412,7 +406,7 @@ public class GeneradorReportes {
         }
     }
 
-    // Clase interna para ayudar con el conteo y porcentaje por género
+    //clase interna para ayudar con el conteo y porcentaje por genero
     private static class ConteoPorcentajeGenero {
         Genero genero;
         int cantidad;

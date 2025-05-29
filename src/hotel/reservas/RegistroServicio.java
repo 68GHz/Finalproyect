@@ -5,7 +5,6 @@ import hotel.servicios.Servicio;
 public class RegistroServicio {
     private Servicio servicio;
     private double costo;
-    // Podríamos añadir más información como la fecha y hora de adquisición
 
     public RegistroServicio(Servicio servicio) {
         this.servicio = servicio;

@@ -14,24 +14,21 @@ public class PilaServiciosAdquiridos<T> {
     }
 
     public void apilar(T elemento) {
-        pila.agregarAlFinal(elemento); // Simula la parte superior de la pila al final de la lista
+        pila.agregarAlFinal(elemento); //simula la parte superior de la pila al final de la lista
     }
 
     public T desapilar() {
         if (estaVacia()) {
-            return null; // O podrías lanzar una excepción
+            return null;
         }
         int ultimoIndice = pila.obtenerTamano() - 1;
         T elemento = pila.obtener(ultimoIndice);
-        // Necesitamos un método para eliminar el último elemento de la lista
+        //metodo para eliminar el ultimo elemento de la lista
         eliminarUltimo();
         return elemento;
     }
 
     private void eliminarUltimo() {
-        // Este método requiere modificar la ListaEnlazada
-        // Lo implementaremos en la siguiente iteración en ListaEnlazada.java
-        // Por ahora, lo dejamos pendiente.
     }
 
     public T verTope() {

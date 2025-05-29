@@ -29,7 +29,7 @@ public class Main {
     private static PilaServiciosAdquiridos<CheckIn> pilaServicios = new PilaServiciosAdquiridos<>();
     private static int[] pagosPorMedio = new int[MedioPago.values().length];
     private static Scanner scanner = new Scanner(System.in);
-    private static GeneradorReportes generadorReportes; // Instancia única del generador de reportes
+    private static GeneradorReportes generadorReportes; //instancia unica del generador de reportes
 
     public static void main(String[] args) {
         inicializarHabitaciones();
@@ -58,7 +58,7 @@ public class Main {
             System.out.println("0. Salir");
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir la nueva línea
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -102,7 +102,7 @@ public class Main {
 
         Huesped nuevoHuesped = new Huesped(documento, nombre, edad, genero);
         colaAtencion.encolar(nuevoHuesped);
-        generadorReportes.registrarTamanoColaAtencion(); // Registrar tamaño al encolar
+        generadorReportes.registrarTamanoColaAtencion(); //registrar tamaño al encolar
         System.out.println("Huésped " + nombre + " agregado a la cola de atención.");
     }
 
@@ -112,14 +112,14 @@ public class Main {
             return;
         }
         Huesped huesped = colaAtencion.desencolar();
-        generadorReportes.registrarTamanoColaAtencion(); // Registrar tamaño al desencolar
+        generadorReportes.registrarTamanoColaAtencion(); //registrar tamaño al desencolar
         System.out.println("Atendiendo al huésped: " + huesped.getNombre());
 
         ListaEnlazada<Habitacion> habitacionesDisponibles = obtenerHabitacionesDisponibles();
 
         if (habitacionesDisponibles.estaVacia()) {
             System.out.println("No hay habitaciones disponibles en este momento.");
-            colaAtencion.encolar(huesped); // Devolver al huésped a la cola si no hay habitación
+            colaAtencion.encolar(huesped); //devolver al huesped a la cola si no hay habitacion
             return;
         }
 
@@ -130,7 +130,7 @@ public class Main {
 
         System.out.print("Seleccione el número de la habitación deseada: ");
         int opcionHabitacion = scanner.nextInt();
-        scanner.nextLine(); // Consumir la nueva línea
+        scanner.nextLine();
 
         if (opcionHabitacion > 0 && opcionHabitacion <= habitacionesDisponibles.obtenerTamano()) {
             Habitacion habitacionSeleccionada = habitacionesDisponibles.obtener(opcionHabitacion - 1);
@@ -140,7 +140,7 @@ public class Main {
             System.out.println("Check-in realizado para " + huesped.getNombre() + " en la habitación " + habitacionSeleccionada.getNumero());
         } else {
             System.out.println("Opción de habitación inválida. El huésped vuelve a la cola de atención.");
-            colaAtencion.encolar(huesped); // Devolver al huésped a la cola por selección inválida
+            colaAtencion.encolar(huesped); //seleccion invalida
         }
     }
 
@@ -187,7 +187,7 @@ public class Main {
         }
         System.out.print("Seleccione el número del huésped: ");
         int indiceHuesped = scanner.nextInt() - 1;
-        scanner.nextLine(); // Consumir la nueva línea
+        scanner.nextLine();
 
         if (indiceHuesped >= 0 && indiceHuesped < registrosCheckIn.obtenerTamano()) {
             CheckIn checkInHuesped = registrosCheckIn.obtener(indiceHuesped);
@@ -201,7 +201,7 @@ public class Main {
             System.out.println("5. Alquiler de Vehículo ($" + ServicioAlquilerVehiculo.PRECIO_POR_DIA + " por día)");
             System.out.print("Seleccione el número del servicio que desea adquirir: ");
             int opcionServicio = scanner.nextInt();
-            scanner.nextLine(); // Consumir la nueva línea
+            scanner.nextLine();
 
             Servicio servicioAdquirido = null;
             double costoServicio = 0.0;
@@ -247,7 +247,7 @@ public class Main {
             if (servicioAdquirido != null) {
                 RegistroServicio registro = new RegistroServicio(servicioAdquirido);
                 checkInHuesped.agregarServicio(registro);
-                pilaServicios.apilar(checkInHuesped); // Registrar que este huésped adquirió un servicio
+                pilaServicios.apilar(checkInHuesped); //registrar que este huesped adquirió un servicio
                 System.out.println("Servicio " + servicioAdquirido.getNombre() + " adquirido por " + checkInHuesped.getHuesped().getNombre());
             }
         } else {
@@ -267,13 +267,13 @@ public class Main {
         }
         System.out.print("Seleccione el número del huésped que se retira: ");
         int indiceHuesped = scanner.nextInt() - 1;
-        scanner.nextLine(); // Consumir la nueva línea
+        scanner.nextLine();
 
         if (indiceHuesped >= 0 && indiceHuesped < registrosCheckIn.obtenerTamano()) {
             CheckIn checkInHuesped = registrosCheckIn.obtener(indiceHuesped);
             System.out.print("Ingrese la cantidad de noches de estadía: ");
             int numeroNoches = scanner.nextInt();
-            scanner.nextLine(); // Consumir la nueva línea
+            scanner.nextLine();
 
             double costoEstadia = checkInHuesped.calcularCostoEstadia(numeroNoches);
             double costoServicios = checkInHuesped.calcularCostoServicios();
@@ -295,7 +295,7 @@ public class Main {
             pagosPorMedio[medioPago.ordinal()]++;
 
             checkInHuesped.getHabitacion().setEstado(EstadoHabitacion.DISPONIBLE);
-            registrosCheckIn.eliminar(checkInHuesped); // Eliminar al huésped de los registros activos
+            registrosCheckIn.eliminar(checkInHuesped); //eliminar al huesped de los registros activos
 
             System.out.println("Check-out realizado para " + checkInHuesped.getHuesped().getNombre() + ". ¡Gracias por su visita!");
 
@@ -328,7 +328,7 @@ public class Main {
             System.out.println("0. Volver al menú principal");
             System.out.print("Seleccione una opción de reporte: ");
             opcionReporte = scanner.nextInt();
-            scanner.nextLine(); // Consumir la nueva línea
+            scanner.nextLine();
 
             switch (opcionReporte) {
                 case 1:
