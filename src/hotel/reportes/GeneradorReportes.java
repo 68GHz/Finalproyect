@@ -128,47 +128,303 @@ public class GeneradorReportes {
     // Por ahora, dejaremos los otros métodos sin implementar para simplificar.
 
     public void mostrarValorTotalRecaudadoPorGenero() {
-        System.out.println("Reporte 'Valor total recaudado por género' no implementado en esta versión simplificada.");
+        ListaEnlazada<ConteoMontoGenero> montosPorGenero = new ListaEnlazada<>();
+
+        for (int i = 0; i < registrosPago.obtenerTamano(); i++) {
+            RegistroPago registro = registrosPago.obtener(i);
+            Genero generoHuesped = registro.getCheckIn().getHuesped().getGenero();
+            double montoPagado = registro.getMonto();
+
+            boolean encontrado = false;
+            for (int j = 0; j < montosPorGenero.obtenerTamano(); j++) {
+                ConteoMontoGenero item = montosPorGenero.obtener(j);
+                if (item.genero == generoHuesped) {
+                    item.monto += montoPagado;
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado) {
+                montosPorGenero.agregarAlFinal(new ConteoMontoGenero(generoHuesped, montoPagado));
+            }
+        }
+
+        System.out.println("--- Valor total recaudado por género ---");
+        for (int i = 0; i < montosPorGenero.obtenerTamano(); i++) {
+            ConteoMontoGenero item = montosPorGenero.obtener(i);
+            System.out.println("- " + item.genero + ": $" + String.format("%.2f", item.monto));
+        }
     }
 
-    public void mostrarMontoTotalRecaudadoPorMedioPago() {
-        System.out.println("Reporte 'Monto total recaudado por medio de pago' no implementado en esta versión simplificada.");
+    // Clase interna para ayudar con el conteo y monto por género
+    private static class ConteoMontoGenero {
+        Genero genero;
+        double monto;
+
+        public ConteoMontoGenero(Genero genero, double monto) {
+            this.genero = genero;
+            this.monto = monto;
+        }
+    }
+
+    public void mostrarPorcentajeRecaudadoPorMedioPago() {
+        double[] montosPorMedioPago = new double[MedioPago.values().length];
+        double montoTotalHotel = 0;
+
+        for (int i = 0; i < registrosPago.obtenerTamano(); i++) {
+            RegistroPago registro = registrosPago.obtener(i);
+            MedioPago medioPago = registro.getMedioPago();
+            montosPorMedioPago[medioPago.ordinal()] += registro.getMonto();
+            montoTotalHotel += registro.getMonto();
+        }
+
+        System.out.println("--- Porcentaje recaudado por medio de pago ---");
+        if (montoTotalHotel > 0) {
+            for (MedioPago medioPago : MedioPago.values()) {
+                double porcentaje = (montosPorMedioPago[medioPago.ordinal()] / montoTotalHotel) * 100;
+                System.out.println("- " + medioPago + ": " + String.format("%.2f", porcentaje) + "%");
+            }
+        } else {
+            System.out.println("No hay ingresos registrados para calcular el porcentaje por medio de pago.");
+        }
     }
 
     public void mostrarMontoTotalRecaudadoPorServicio() {
-        System.out.println("Reporte 'Monto total recaudado por servicio' no implementado en esta versión simplificada.");
+        ListaEnlazada<ConteoServicio> montosPorServicio = new ListaEnlazada<>();
+
+        for (int i = 0; i < registrosCheckIn.obtenerTamano(); i++) {
+            CheckIn checkIn = registrosCheckIn.obtener(i);
+            for (int j = 0; j < checkIn.getServiciosAdquiridos().obtenerTamano(); j++) {
+                RegistroServicio registroServicio = checkIn.getServiciosAdquiridos().obtener(j);
+                TipoServicio tipoServicio = registroServicio.getServicio().getTipo();
+                double costoServicio = registroServicio.getServicio().calcularPrecio();
+
+                boolean encontrado = false;
+                for (int k = 0; k < montosPorServicio.obtenerTamano(); k++) {
+                    ConteoServicio item = montosPorServicio.obtener(k);
+                    if (item.tipoServicio == tipoServicio) {
+                        item.monto += costoServicio;
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (!encontrado) {
+                    montosPorServicio.agregarAlFinal(new ConteoServicio(tipoServicio, costoServicio));
+                }
+            }
+        }
+
+        System.out.println("--- Monto total recaudado por servicio ---");
+        for (int i = 0; i < montosPorServicio.obtenerTamano(); i++) {
+            ConteoServicio item = montosPorServicio.obtener(i);
+            System.out.println("- " + item.tipoServicio + ": $" + String.format("%.2f", item.monto));
+        }
+    }
+
+    // Clase interna para ayudar con el conteo de servicios
+    private static class ConteoServicio {
+        TipoServicio tipoServicio;
+        double monto;
+
+        public ConteoServicio(TipoServicio tipoServicio, double monto) {
+            this.tipoServicio = tipoServicio;
+            this.monto = monto;
+        }
     }
 
     public void mostrarMontoTotalDescuentosHechos() {
-        System.out.println("Reporte 'Monto total de descuentos hechos' no implementado en esta versión simplificada.");
+        double totalDescuentos = 0;
+        for (int i = 0; i < registrosPago.obtenerTamano(); i++) {
+            // Asumiendo que la clase RegistroPago tiene un método para obtener el descuento aplicado
+            totalDescuentos += registrosPago.obtener(i).getDescuentoAplicado();
+        }
+        System.out.println("Monto total de descuentos hechos: $" + String.format("%.2f", totalDescuentos));
     }
 
     public void mostrarMontoTotalPorRangoEdad() {
-        System.out.println("Reporte 'Monto total por rango de edad' no implementado en esta versión simplificada.");
+        double[] montosPorRango = new double[4]; // Ejemplo de 4 rangos de edad
+        // Rangos de edad: 0-12 (Niños), 13-25 (Jóvenes), 26-60 (Adultos), >60 (Adultos Mayores)
+
+        for (int i = 0; i < registrosPago.obtenerTamano(); i++) {
+            RegistroPago registro = registrosPago.obtener(i);
+            int edadHuesped = registro.getCheckIn().getHuesped().getEdad();
+            double montoPagado = registro.getMonto();
+
+            if (edadHuesped <= 12) {
+                montosPorRango[0] += montoPagado;
+            } else if (edadHuesped <= 25) {
+                montosPorRango[1] += montoPagado;
+            } else if (edadHuesped <= 60) {
+                montosPorRango[2] += montoPagado;
+            } else {
+                montosPorRango[3] += montoPagado;
+            }
+        }
+
+        System.out.println("--- Monto total recaudado por rango de edad ---");
+        System.out.println("- Niños (0-12 años): $" + String.format("%.2f", montosPorRango[0]));
+        System.out.println("- Jóvenes (13-25 años): $" + String.format("%.2f", montosPorRango[1]));
+        System.out.println("- Adultos (26-60 años): $" + String.format("%.2f", montosPorRango[2]));
+        System.out.println("- Adultos Mayores (>60 años): $" + String.format("%.2f", montosPorRango[3]));
     }
 
     public void mostrarHuespedMasYMenosPago() {
-        System.out.println("Reporte 'Huésped que más pagó y el que menos pagó' no implementado en esta versión simplificada.");
+        if (registrosPago.estaVacia()) {
+            System.out.println("No hay registros de pago para generar este reporte.");
+            return;
+        }
+
+        RegistroPago pagoMaximo = registrosPago.obtener(0);
+        RegistroPago pagoMinimo = registrosPago.obtener(0);
+
+        for (int i = 1; i < registrosPago.obtenerTamano(); i++) {
+            RegistroPago pagoActual = registrosPago.obtener(i);
+            if (pagoActual.getMonto() > pagoMaximo.getMonto()) {
+                pagoMaximo = pagoActual;
+            }
+            if (pagoActual.getMonto() < pagoMinimo.getMonto()) {
+                pagoMinimo = pagoActual;
+            }
+        }
+
+        System.out.println("--- Huésped que más pagó y el que menos pagó ---");
+        System.out.println("Huésped que más pagó: " + pagoMaximo.getCheckIn().getHuesped().getNombre() + " - Monto: $" + String.format("%.2f", pagoMaximo.getMonto()));
+        System.out.println("Huésped que menos pagó: " + pagoMinimo.getCheckIn().getHuesped().getNombre() + " - Monto: $" + String.format("%.2f", pagoMinimo.getMonto()));
     }
 
     public void mostrarPorcentajeHuespedesPorRangoEdad() {
-        System.out.println("Reporte 'Porcentaje de huéspedes atendidos por rango de edad' no implementado en esta versión simplificada.");
+        int[] conteoPorRango = new int[4]; // Ejemplo de 4 rangos de edad
+        int totalHuespedes = registrosCheckIn.obtenerTamano();
+
+        if (totalHuespedes == 0) {
+            System.out.println("No hay registros de check-in para generar este reporte.");
+            return;
+        }
+
+        // Rangos de edad: 0-12 (Niños), 13-25 (Jóvenes), 26-60 (Adultos), >60 (Adultos Mayores)
+        for (int i = 0; i < registrosCheckIn.obtenerTamano(); i++) {
+            int edadHuesped = registrosCheckIn.obtener(i).getHuesped().getEdad();
+            if (edadHuesped <= 12) {
+                conteoPorRango[0]++;
+            } else if (edadHuesped <= 25) {
+                conteoPorRango[1]++;
+            } else if (edadHuesped <= 60) {
+                conteoPorRango[2]++;
+            } else {
+                conteoPorRango[3]++;
+            }
+        }
+
+        System.out.println("--- Porcentaje de huéspedes atendidos por rango de edad ---");
+        System.out.println("- Niños (0-12 años): " + String.format("%.2f", (double) conteoPorRango[0] / totalHuespedes * 100) + "%");
+        System.out.println("- Jóvenes (13-25 años): " + String.format("%.2f", (double) conteoPorRango[1] / totalHuespedes * 100) + "%");
+        System.out.println("- Adultos (26-60 años): " + String.format("%.2f", (double) conteoPorRango[2] / totalHuespedes * 100) + "%");
+        System.out.println("- Adultos Mayores (>60 años): " + String.format("%.2f", (double) conteoPorRango[3] / totalHuespedes * 100) + "%");
     }
 
     public void mostrarPorcentajeRecaudadoPorServicio() {
-        System.out.println("Reporte 'Porcentaje recaudado de cada servicio' no implementado en esta versión simplificada.");
+        ListaEnlazada<ConteoServicio> montosPorServicio = new ListaEnlazada<>();
+        double montoTotalHotel = 0;
+
+        // Calcular el monto total recaudado por cada servicio
+        for (int i = 0; i < registrosCheckIn.obtenerTamano(); i++) {
+            CheckIn checkIn = registrosCheckIn.obtener(i);
+            for (int j = 0; j < checkIn.getServiciosAdquiridos().obtenerTamano(); j++) {
+                RegistroServicio registroServicio = checkIn.getServiciosAdquiridos().obtener(j);
+                TipoServicio tipoServicio = registroServicio.getServicio().getTipo();
+                double costoServicio = registroServicio.getPrecio();
+
+                boolean encontrado = false;
+                for (int k = 0; k < montosPorServicio.obtenerTamano(); k++) {
+                    ConteoServicio item = montosPorServicio.obtener(k);
+                    if (item.tipoServicio == tipoServicio) {
+                        item.monto += costoServicio;
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (!encontrado) {
+                    montosPorServicio.agregarAlFinal(new ConteoServicio(tipoServicio, costoServicio));
+                }
+            }
+        }
+
+        // Calcular el monto total recaudado en el hotel
+        for (int i = 0; i < registrosPago.obtenerTamano(); i++) {
+            montoTotalHotel += registrosPago.obtener(i).getMonto();
+        }
+
+        System.out.println("--- Porcentaje recaudado de cada servicio ---");
+        if (montoTotalHotel > 0) {
+            for (int i = 0; i < montosPorServicio.obtenerTamano(); i++) {
+                ConteoServicio item = montosPorServicio.obtener(i);
+                double porcentaje = (item.monto / montoTotalHotel) * 100;
+                System.out.println("- " + item.tipoServicio + ": " + String.format("%.2f", porcentaje) + "%");
+            }
+        } else {
+            System.out.println("No hay ingresos registrados para calcular el porcentaje por servicio.");
+        }
     }
 
-    public void mostrarPorcentajeHuespedesPorMedioPago() {
-        System.out.println("Reporte 'Porcentaje de huéspedes por medio de pago' no implementado en esta versión simplificada.");
+    public void mostrarMontoTotalRecaudadoPorMedioPago() {
+        double[] montosPorMedioPago = new double[MedioPago.values().length];
+        for (int i = 0; i < registrosPago.obtenerTamano(); i++) {
+            RegistroPago registro = registrosPago.obtener(i);
+            MedioPago medioPago = registro.getMedioPago();
+            montosPorMedioPago[medioPago.ordinal()] += registro.getMonto();
+        }
+
+        System.out.println("--- Monto total recaudado por medio de pago ---");
+        for (MedioPago medioPago : MedioPago.values()) {
+            System.out.println("- " + medioPago + ": $" + String.format("%.2f", montosPorMedioPago[medioPago.ordinal()]));
+        }
     }
 
     public void mostrarPorcentajeHuespedesPorGenero() {
-        System.out.println("Reporte 'Porcentaje de huéspedes por género' no implementado en esta versión simplificada.");
+        int totalHuespedes = registrosCheckIn.obtenerTamano();
+        if (totalHuespedes == 0) {
+            System.out.println("No hay registros de check-in para generar este reporte.");
+            return;
+        }
+
+        ListaEnlazada<ConteoPorcentajeGenero> conteoPorcentajeGenero = new ListaEnlazada<>();
+        for (int i = 0; i < registrosCheckIn.obtenerTamano(); i++) {
+            Genero genero = registrosCheckIn.obtener(i).getHuesped().getGenero();
+            boolean encontrado = false;
+            for (int j = 0; j < conteoPorcentajeGenero.obtenerTamano(); j++) {
+                ConteoPorcentajeGenero item = conteoPorcentajeGenero.obtener(j);
+                if (item.genero == genero) {
+                    item.cantidad++;
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado) {
+                conteoPorcentajeGenero.agregarAlFinal(new ConteoPorcentajeGenero(genero, 1));
+            }
+        }
+
+        System.out.println("--- Porcentaje de huéspedes por género ---");
+        for (int i = 0; i < conteoPorcentajeGenero.obtenerTamano(); i++) {
+            ConteoPorcentajeGenero item = conteoPorcentajeGenero.obtener(i);
+            double porcentaje = (double) item.cantidad / totalHuespedes * 100;
+            System.out.println("- " + item.genero + ": " + String.format("%.2f", porcentaje) + "%");
+        }
+    }
+
+    // Clase interna para ayudar con el conteo y porcentaje por género
+    private static class ConteoPorcentajeGenero {
+        Genero genero;
+        int cantidad;
+
+        public ConteoPorcentajeGenero(Genero genero, int cantidad) {
+            this.genero = genero;
+            this.cantidad = cantidad;
+        }
     }
 
     public void mostrarTotalDineroRecaudadoPorRangoEdad() {
-        System.out.println("Reporte 'Total de dinero recaudado por rango de edad' no implementado en esta versión simplificada.");
+        this.mostrarMontoTotalPorRangoEdad();
     }
 
     public void mostrarCantidadPersonasEnColaMasajes() {

@@ -6,11 +6,13 @@ public class RegistroPago {
     private CheckIn checkIn;
     private MedioPago medioPago;
     private double monto;
+    private double descuentoAplicado;
 
-    public RegistroPago(CheckIn checkIn, MedioPago medioPago, double monto) {
+    public RegistroPago(CheckIn checkIn, MedioPago medioPago, double monto, double descuentoAplicado) {
         this.checkIn = checkIn;
         this.medioPago = medioPago;
         this.monto = monto;
+        this.descuentoAplicado = descuentoAplicado;
     }
 
     public CheckIn getCheckIn() {
@@ -23,6 +25,10 @@ public class RegistroPago {
 
     public double getMonto() {
         return monto;
+    }
+
+    public double getDescuentoAplicado() {
+        return descuentoAplicado;
     }
 
     @Override
